@@ -1,10 +1,13 @@
-import nltk
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-
-def preprocess(text):
-    text = text.lower()
-    tokens = word_tokenize(text)
-    tokens = [t for t in tokens if t.isalpha()]
-    tokens = [t for t in tokens if t not in stopwords.words('english')]
-    return ' '.join(tokens)
+def recommend_courses(input_text, top_n):
+    query_vec = tfidf.transform([input_text])
+    similarities = cosine_similarity(query_vec, tfidf_matrix).flatten()
+    indices = similarities.argsort()[-top_n:][::-1]
+    results = []
+    for i in indices:
+        row = df.iloc[i]
+        result = f"🎓 **{row['Name']}** ({row['University']})\\n"
+        result += f"📈 Level: {row['Difficulty Level']}\\n"
+        result += f"🔗 [Course Link]({row['Link']})\\n\\n"
+        result += f"{row['Full_Description'][:500]}...\\n"
+        results.append(result)
+    return "\\n---\\n".join(results)
